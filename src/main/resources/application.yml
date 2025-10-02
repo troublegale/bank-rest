@@ -1,1 +1,34 @@
-spring.application.name=bankcards
+server:
+  port: 8182
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: bankcards
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  liquibase:
+    enabled: true
+    change-log: classpath:db/migrations/db.changelog-master.yaml
+
+jwt:
+  secret: ${JWT_SECRET}
+  lifetime: ${JWT_LIFETIME}
+
+credentials:
+  admin:
+    email: ${ADMIN_EMAIL}
+    password: ${ADMIN_PASSWORD}
+
+logging:
+  level:
+    root: info
