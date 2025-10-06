@@ -1,16 +1,14 @@
 server:
-  port: 8182
+  port: 8080
 
 spring:
-  config:
-    import: optional:file:.env[.properties]
   application:
     name: bankcards
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST}:${PGPORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   jpa:
     show-sql: false
     hibernate:
@@ -26,6 +24,8 @@ jwt:
 
 credentials:
   admin:
+    first-name: ${ADMIN_FIRST_NAME}
+    last-name: ${ADMIN_LAST_NAME}
     email: ${ADMIN_EMAIL}
     password: ${ADMIN_PASSWORD}
 
