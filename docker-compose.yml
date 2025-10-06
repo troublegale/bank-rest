@@ -1,25 +1,47 @@
 volumes:
   postgresql-data:
+  caddy_data:
+  caddy_config:
 
 services:
   bankcards-app:
     build: .
     env_file:
       - .env
-    ports:
-      - "8182:8182"
+    expose:
+      - 8080
     depends_on:
       - bankcards-db
     container_name: bankcards-app
+    networks:
+      - backend
+
   bankcards-db:
     image: postgres:17-alpine
-    ports:
-      - "${DB_PORT}:${DB_PORT}"
-    volumes:
-      - postgresql_data:/var/lib/postgresql/data
-    environment:
-      - PGPORT=${DB_PORT}
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
     container_name: bankcards-db
+    env_file:
+      - .env
+    ports:
+      - ${PGPORT}:${PGPORT}
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  caddy:
+    image: caddy:2.10.2-alpine
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "8443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - bankcards-app
+    networks:
+      - backend
+
+networks:
+  backend:
