@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-cards
+      author: ivan_k
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    foreignKeyName: fk_cards_user
+              - column:
+                  name: number
+                  type: BYTEA
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last4
+                  type: CHAR(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cardholder_name
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration_month
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration_year
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: card_status
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: NUMERIC(18,2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false

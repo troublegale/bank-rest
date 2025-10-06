@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/create/001-create-enums.yml
+  - include:
+      file: db/migration/create/002-create-users.yml
+  - include:
+      file: db/migration/create/003-create-roles.yml
+  - include:
+      file: db/migration/create/004-create-users-roles.yml
+  - include:
+      file: db/migration/create/005-create-refresh-tokens.yml
+  - include:
+      file: db/migration/create/006-create-cards.yml
+  - include:
+      file: db/migration/create/007-create-block-request-tickets.yml

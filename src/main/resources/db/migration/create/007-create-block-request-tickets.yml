@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-create-block-request-tickets
+      author: ivan_k
+      changes:
+        - createTable:
+            tableName: block_request_tickets
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: card_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    referencedTableName: cards
+                    referencedColumnNames: id
+                    foreignKeyName: fk_block_tickets_card
+              - column:
+                  name: time_stamp
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: block_ticket_status
+                  constraints:
+                    nullable: false

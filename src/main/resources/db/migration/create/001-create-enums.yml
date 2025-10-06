@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-enums
+      author: ivan_k
+      changes:
+        - createType:
+            typeName: card_status
+            asEnum:
+              - CREATED
+              - ACTIVE
+              - BLOCKED
+              - EXPIRED
+        - createType:
+            typeName: block_ticket_status
+            asEnum:
+              - PENDING
+              - APPROVED
+              - REJECTED
