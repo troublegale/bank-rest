@@ -22,7 +22,7 @@ databaseChangeLog:
                     foreignKeyName: fk_refresh_tokens_user
               - column:
                   name: token
-                  type: VARCHAR(512)
+                  type: uuid
                   constraints:
                     nullable: false
                     unique: true
