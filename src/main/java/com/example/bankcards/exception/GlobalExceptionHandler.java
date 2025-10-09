@@ -101,4 +101,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(TicketAlreadyResolvedException.class)
+    public  ResponseEntity<AppError> handleTicketAlreadyResolvedException(TicketAlreadyResolvedException ex) {
+        String message = ex.getMessage();
+        AppError error = new AppError(409, List.of(message), new Date());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 }
