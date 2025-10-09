@@ -13,5 +13,6 @@
 2. Change values in `.env`
 3. Build with Maven: `mvn clean package`
 4. Launch containers: `docker compose up -d --build`
-5. Access the API via `https://localhost:8443/` (make sure to trust the Caddy certificate!)
+5. Access the API via `https://localhost:8443/` (make sure to trust the Caddy certificate!).
+Both HTTP/1.1 & HTTP/2 are available.
 6. See Swagger UI documentation at `https://localhost:8443/swagger-ui/index.html`
