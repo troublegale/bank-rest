@@ -3,16 +3,6 @@ databaseChangeLog:
       id: 001-create-enums
       author: ivan_k
       changes:
-        - createType:
-            typeName: card_status
-            asEnum:
-              - CREATED
-              - ACTIVE
-              - BLOCKED
-              - EXPIRED
-        - createType:
-            typeName: block_ticket_status
-            asEnum:
-              - PENDING
-              - APPROVED
-              - REJECTED
+        - sql: |
+            CREATE TYPE card_status AS ENUM ('CREATED', 'ACTIVE', 'BLOCKED', 'EXPIRED');
+            CREATE TYPE block_ticket_status AS ENUM ('PENDING', 'APPROVED', 'REJECTED');

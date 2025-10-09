@@ -17,9 +17,6 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
-                    referencedTableName: users
-                    referencedColumnNames: id
-                    foreignKeyName: fk_refresh_tokens_user
               - column:
                   name: token
                   type: uuid
@@ -31,3 +28,10 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: refresh_tokens
+            baseColumnNames: user_id
+            constraintName: fk_refresh_tokens_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE

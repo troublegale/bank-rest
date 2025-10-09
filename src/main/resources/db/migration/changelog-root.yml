@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/migration/create/006-create-cards.yml
   - include:
       file: db/migration/create/007-create-block-request-tickets.yml
+  - include:
+      file: db/migration/default/001-insert-default-roles.yml
