@@ -1,10 +1,11 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.entity.Role;
-import com.example.bankcards.exception.RoleNotFoundException;
 import com.example.bankcards.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +15,7 @@ public class RoleService {
 
     public Role findByName(String name) {
         return roleRepo.findByName(name).orElseThrow(() ->
-                new RoleNotFoundException(String.format("Role %s not found", name)));
+                new NoSuchElementException(String.format("Role %s not found", name)));
     }
 
     public Role getUserRole() {

@@ -1,6 +1,7 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.dto.*;
+import com.example.bankcards.entity.Role;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.InvalidRefreshTokenException;
 import com.example.bankcards.security.JwtManager;
@@ -35,7 +36,7 @@ public class AuthService {
         String email = authRequest.email();
         String password = authRequest.password();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        User user = userService.findByEmail(email);
+        User user = userService.getByEmail(email);
         String jwt = jwtManager.generateToken(user);
         String refreshToken = refreshTokenService.getRefreshToken(user);
         return new TokenResponse(jwt, refreshToken);
@@ -69,7 +70,7 @@ public class AuthService {
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getRoles().stream().toList()
+                user.getRoles().stream().map(Role::getName).toList()
         );
     }
 
