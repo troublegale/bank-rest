@@ -210,14 +210,14 @@ paths:
           required: false
           schema:
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: Size of the page. Default is 10.
           required: false
           schema:
             type: integer
-            format: int64
+            format: int32
         - name: sort
           in: query
           description: |-
@@ -230,7 +230,7 @@ paths:
           required: false
           schema:
             type: string
-            example: "id,asc"
+            example: "id_asc"
         - name: userId
           in: query
           description: Filter for the user id field (exact match)
@@ -861,14 +861,14 @@ paths:
           required: false
           schema:
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: Size of the page. Default is 10.
           required: false
           schema:
             type: integer
-            format: int64
+            format: int32
       responses:
         200:
           description: Successful operation
@@ -1070,14 +1070,14 @@ paths:
           required: false
           schema:
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: Size of the page. Default is 10.
           required: false
           schema:
             type: integer
-            format: int64
+            format: int32
         - name: sort
           in: query
           description: |-
@@ -1089,7 +1089,7 @@ paths:
           required: false
           schema:
             type: string
-            example: "id,asc"
+            example: "id_asc"
         - name: firstName
           in: query
           description: Filter for the first name field (exact match)
@@ -1456,16 +1456,16 @@ components:
             type: object
         page:
           type: integer
-          format: int64
+          format: int32
         size:
           type: integer
-          format: int64
+          format: int32
         totalElements:
           type: integer
-          format: int64
+          format: int32
         totalPages:
           type: integer
-          format: int64
+          format: int32
 
     BlockRequestTicket:
       type: object
@@ -1539,8 +1539,15 @@ components:
         email:
           type: string
           example: "example@gmail.com"
-        role:
-          type: string
-          enum:
-            - ROLE_USER
-            - ROLE_ADMIN
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+              - ROLE_USER
+              - ROLE_ADMIN
+      required:
+        - firstName
+        - lastName
+        - email
+        - roles
