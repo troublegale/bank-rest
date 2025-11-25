@@ -2,10 +2,12 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.entity.BlockRequestTicket;
 import com.example.bankcards.entity.BlockTicketStatus;
-import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.CardStatus;
 import com.example.bankcards.exception.InvalidSearchQueryException;
-import com.example.bankcards.exception.TicketAlreadyResolvedException;
+import com.example.bankcards.exception.TicketConflictException;
 import com.example.bankcards.repository.BlockRequestTicketRepository;
+import com.example.bankcards.repository.CardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -23,7 +26,7 @@ public class BlockRequestTicketService {
 
     private final BlockRequestTicketRepository blockRequestTicketRepo;
 
-    private final CardService cardService;
+    private final CardRepository cardRepository;
 
     @Transactional
     public BlockRequestTicket getById(Long id) {
@@ -35,10 +38,12 @@ public class BlockRequestTicketService {
     public BlockRequestTicket approveById(Long id) {
         BlockRequestTicket blockRequestTicket = getById(id);
         if (blockRequestTicket.getStatus() != BlockTicketStatus.PENDING) {
-            throw new TicketAlreadyResolvedException("BlockRequest with id " + id + " is already resolved");
+            throw new TicketConflictException("BlockRequest with id " + id + " is already resolved");
         }
         blockRequestTicket.setStatus(BlockTicketStatus.APPROVED);
-        cardService.blockCard(blockRequestTicket.getCard());
+        Card card = blockRequestTicket.getCard();
+        card.setStatus(CardStatus.BLOCKED);
+        cardRepository.save(card);
         return blockRequestTicketRepo.save(blockRequestTicket);
     }
 
@@ -46,7 +51,7 @@ public class BlockRequestTicketService {
     public BlockRequestTicket rejectById(Long id) {
         BlockRequestTicket blockRequestTicket = getById(id);
         if (blockRequestTicket.getStatus() != BlockTicketStatus.PENDING) {
-            throw new TicketAlreadyResolvedException("BlockRequest with id " + id + " is already resolved");
+            throw new TicketConflictException("BlockRequest with id " + id + " is already resolved");
         }
         blockRequestTicket.setStatus(BlockTicketStatus.REJECTED);
         return  blockRequestTicketRepo.save(blockRequestTicket);
@@ -67,6 +72,19 @@ public class BlockRequestTicketService {
             System.out.println(e.getMessage());
             throw new InvalidSearchQueryException("Invalid filters or sorting parameters");
         }
+    }
+
+    @Transactional
+    public void createBlockRequest(Card card) {
+        if (blockRequestTicketRepo.existsByCard(card)) {
+            throw new TicketConflictException("Blocking for card with id " + card.getId() + " was already requested.");
+        }
+        BlockRequestTicket blockRequestTicket = BlockRequestTicket.builder()
+                .card(card)
+                .timestamp(LocalDateTime.now())
+                .status(BlockTicketStatus.PENDING)
+                .build();
+        blockRequestTicketRepo.save(blockRequestTicket);
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -59,8 +60,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(NotAllowedException.class)
-    public ResponseEntity<AppError> handleNotAllowedException(NotAllowedException ex) {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<AppError> handleNotAllowedException(AccessDeniedException ex) {
         String message = ex.getMessage();
         AppError error = new AppError(403, List.of(message), new Date());
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
@@ -101,8 +102,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(TicketAlreadyResolvedException.class)
-    public  ResponseEntity<AppError> handleTicketAlreadyResolvedException(TicketAlreadyResolvedException ex) {
+    @ExceptionHandler(TicketConflictException.class)
+    public ResponseEntity<AppError> handleTicketAlreadyResolvedException(TicketConflictException ex) {
+        String message = ex.getMessage();
+        AppError error = new AppError(409, List.of(message), new Date());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(CardConflictException.class)
+    public ResponseEntity<AppError> handleCardConflictException(CardConflictException ex) {
         String message = ex.getMessage();
         AppError error = new AppError(409, List.of(message), new Date());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);

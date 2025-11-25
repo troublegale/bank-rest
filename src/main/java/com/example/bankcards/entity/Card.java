@@ -2,13 +2,19 @@ package com.example.bankcards.entity;
 
 import com.example.bankcards.util.CardNumberEncryptor;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "cards")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card {
 
     @Id
@@ -24,7 +30,7 @@ public class Card {
     @Column(name = "number", nullable = false, columnDefinition = "bytea")
     private String number;
 
-    @Column(name = "las4", nullable = false)
+    @Column(name = "last4", nullable = false)
     private String last4;
 
     @Column(name = "cardholder_name", nullable = false)

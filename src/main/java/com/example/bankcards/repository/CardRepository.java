@@ -5,9 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificationExecutor<Card> {
 
+    boolean existsByNumber(String number);
 
+    Collection<Card> findCardsByUser_Email(String email);
 
 }
